@@ -3,7 +3,6 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-
 def build_similarity_graph(dataset1, dataset2, similarity_func="cosine"):
     """
     Constrói o grafo bipartido G = (V1, V2, E) a partir de dois datasets de strings.
@@ -16,6 +15,7 @@ def build_similarity_graph(dataset1, dataset2, similarity_func="cosine"):
     Returns:
         tuple: (V1, V2, E)
     """
+    #guardar id do vértice junto com o valor, mas ignorá-lo na similaridade e calcular a proximidade de cada coluna e depois somar
     V1 = set(dataset1)
     V2 = set(dataset2)
     E = []
@@ -25,6 +25,7 @@ def build_similarity_graph(dataset1, dataset2, similarity_func="cosine"):
         tfidf1 = vectorizer.transform(dataset1)
         tfidf2 = vectorizer.transform(dataset2)
         sim_matrix = cosine_similarity(tfidf1, tfidf2)
+        print(sim_matrix)
     elif similarity_func == "jaccard":
         def jaccard(a, b):
             sa, sb = set(a.lower().split()), set(b.lower().split())
@@ -37,5 +38,4 @@ def build_similarity_graph(dataset1, dataset2, similarity_func="cosine"):
         for j, vj in enumerate(dataset2):
             sim = sim_matrix[i, j]
             E.append((vi, vj, sim))
-
     return V1, V2, E
